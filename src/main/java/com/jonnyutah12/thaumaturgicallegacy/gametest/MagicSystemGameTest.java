@@ -88,6 +88,8 @@ public final class MagicSystemGameTest {
                     "test assumes the wand has room to receive vis");
 
             Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+            // useOn() mutates context.getItemInHand() — the player must hold the wand.
+            player.setItemInHand(InteractionHand.MAIN_HAND, wand);
             BlockHitResult tapTop = new BlockHitResult(Vec3.atCenterOf(tapPos), Direction.UP, tapPos, false);
             wand.useOn(new UseOnContext(player, InteractionHand.MAIN_HAND, tapTop));
 
