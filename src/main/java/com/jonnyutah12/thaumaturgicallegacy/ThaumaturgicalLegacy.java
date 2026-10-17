@@ -5,6 +5,7 @@ import com.jonnyutah12.thaumaturgicallegacy.accessory.curios.CuriosBridge;
 import com.jonnyutah12.thaumaturgicallegacy.accessory.fallback.CharmSyncPayload;
 import com.jonnyutah12.thaumaturgicallegacy.gametest.AccessoryCuriosGameTest;
 import com.jonnyutah12.thaumaturgicallegacy.gametest.AccessoryFallbackGameTest;
+import com.jonnyutah12.thaumaturgicallegacy.gametest.MagicSystemGameTest;
 import com.jonnyutah12.thaumaturgicallegacy.gametest.ModSmokeGameTest;
 import com.jonnyutah12.thaumaturgicallegacy.registration.ModAttachments;
 import com.jonnyutah12.thaumaturgicallegacy.registration.ModBlockEntities;
@@ -87,6 +88,7 @@ public class ThaumaturgicalLegacy {
      */
     private void registerGameTests(RegisterGameTestsEvent event) {
         event.register(ModSmokeGameTest.class);
+        event.register(MagicSystemGameTest.class);
         if (AccessoryProviders.curiosLoaded()) {
             event.register(AccessoryCuriosGameTest.class);
         } else {
