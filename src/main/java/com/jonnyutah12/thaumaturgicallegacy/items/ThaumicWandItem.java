@@ -1,6 +1,7 @@
 package com.jonnyutah12.thaumaturgicallegacy.items;
 
 import com.jonnyutah12.thaumaturgicallegacy.blockentity.VisTapBlockEntity;
+import com.jonnyutah12.thaumaturgicallegacy.accessory.WornAccessories;
 import com.jonnyutah12.thaumaturgicallegacy.magic.Spell;
 import com.jonnyutah12.thaumaturgicallegacy.magic.SpellCatalog;
 import com.jonnyutah12.thaumaturgicallegacy.magic.SpellDefinition;
@@ -73,7 +74,10 @@ public class ThaumicWandItem extends Item {
         Spell spell = activeSpell(stack);
         SpellDefinition definition = SpellCatalog.definition(spell);
         VisStorage vis = readVis(stack);
-        if (!vis.withdraw(definition.visCost())) {
+        // Worn accessories (vis amulet) discount the cost; the query is
+        // provider-independent (TL-019, docs/architecture/ACCESSORY_SYSTEM.md).
+        int cost = WornAccessories.visCostFor(player, definition.visCost());
+        if (!vis.withdraw(cost)) {
             player.displayClientMessage(
                     Component.translatable("message.thaumaturgicallegacy.wand_empty"), true);
             player.getCooldowns().addCooldown(this, EMPTY_COOLDOWN_TICKS);

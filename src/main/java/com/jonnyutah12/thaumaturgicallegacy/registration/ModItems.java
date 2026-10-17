@@ -2,6 +2,7 @@ package com.jonnyutah12.thaumaturgicallegacy.registration;
 
 import com.jonnyutah12.thaumaturgicallegacy.ThaumaturgicalLegacy;
 import com.jonnyutah12.thaumaturgicallegacy.items.ThaumicWandItem;
+import com.jonnyutah12.thaumaturgicallegacy.items.VisAmuletItem;
 import com.jonnyutah12.thaumaturgicallegacy.magic.Spell;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Rarity;
@@ -34,6 +35,18 @@ public final class ModItems {
 
     public static final DeferredItem<BlockItem> VIS_TAP_ITEM =
             ITEMS.registerSimpleBlockItem(ModBlocks.VIS_TAP);
+
+    /**
+     * The Vis Amulet (TL-019): a {@code ThaumicAccessory} worn in the
+     * dedicated charm slot. The item class is deliberately free of any
+     * accessory-framework type — the Curios bridge attaches its behavior
+     * via {@code CuriosApi.registerCurio}, and the fallback provider
+     * equips it through the shared {@code ThaumicAccessory} marker.
+     */
+    public static final DeferredItem<VisAmuletItem> VIS_AMULET =
+            ITEMS.registerItem("vis_amulet", props -> new VisAmuletItem(props
+                    .stacksTo(1)
+                    .rarity(Rarity.UNCOMMON)));
 
     /** See {@link ModBlocks#register(IEventBus)}: must run before RegisterEvents fire. */
     public static void register(IEventBus bus) {

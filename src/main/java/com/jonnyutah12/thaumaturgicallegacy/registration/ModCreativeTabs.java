@@ -22,6 +22,7 @@ public final class ModCreativeTabs {
                     .displayItems((parameters, output) -> {
                         output.accept(ModItems.THAUMIC_WAND.get());
                         output.accept(ModItems.VIS_TAP_ITEM.get());
+                        output.accept(ModItems.VIS_AMULET.get());
                     })
                     .build());
 

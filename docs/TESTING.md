@@ -28,6 +28,9 @@ namespaced tests run.
 ./gradlew test                # unit tests only (fast)
 ./gradlew build               # compiles + unit tests (what CI runs first)
 ./gradlew runGameTestServer   # boots the game test server, runs gametests, exits
+./gradlew runGameTestServer -Ptl.noCurios   # same, WITHOUT the optional Curios
+                              # dependency on the runtime classpath — the
+                              # in-game no-Curios startup check (TL-019 pair)
 ```
 
 CI (`.github/workflows/build.yml`) runs `build` then `runGameTestServer`.
@@ -38,7 +41,8 @@ A red CI means do not release (see the release process in VERSIONING.md).
 - Never hardcode versions, mod ids, or platform versions in tests. The `test`
   task injects them from `gradle.properties` as `tl.*` system properties
   (`tl.modId`, `tl.modVersion`, `tl.neoVersion`, `tl.minecraftVersion`,
-  `tl.modLicense`, `tl.modName`, `tl.generatedModsToml`, `tl.modSourceFile`).
+  `tl.curiosVersion`, `tl.modLicense`, `tl.modName`, `tl.generatedModsToml`,
+  `tl.modSourceFile`, `tl.mainClassesDir`).
   This keeps the single-source-of-truth rule of VERSIONING.md enforced
   mechanically — the existing guards live in `ModMetadataConsistencyTest`
   and `VersionPolicyTest`.
@@ -52,7 +56,14 @@ A red CI means do not release (see the release process in VERSIONING.md).
   `ThaumaturgicalLegacy#registerGameTests`.
 - Annotate the class with `@GameTestHolder(ThaumaturgicalLegacy.MODID)` —
   without it the test is namespaced to `minecraft` and silently filtered out
-  by the enabled-namespace gate.
+  by the enabled-namespace gate. **Exception:** classes that must only
+  *exist* when an optional dependency is present (e.g. the Curios-path
+  accessory test references Curios types) must NOT carry `@GameTestHolder`:
+  annotated holders are auto-discovered regardless of the
+  `RegisterGameTestsEvent` gating. Omit the annotation, set
+  `templateNamespace = ThaumaturgicalLegacy.MODID` on each `@GameTest`,
+  keep `@PrefixGameTestTemplate(false)`, and rely on the conditional
+  event registration.
 - Structure templates live in `src/main/resources/data/thaumaturgicallegacy/structure/*.nbt`
   and are registered in `docs/ASSET_PROVENANCE.md` like any other asset.
   `@PrefixGameTestTemplate(false)` keeps template names predictable.
@@ -63,12 +74,25 @@ A red CI means do not release (see the release process in VERSIONING.md).
 
 - `ModMetadataConsistencyTest` — generated `neoforge.mods.toml` matches
   `gradle.properties`, the `MODID` constant matches `mod_id`, required
-  platform dependencies are declared with derived ranges.
+  platform dependencies are declared with derived ranges, and the optional
+  Curios integration is declared `optional` with a range derived from
+  `curios_version`.
 - `VersionPolicyTest` — `mod_version` satisfies the SemVer + SNAPSHOT scheme
   from VERSIONING.md; `mod_id` satisfies the loader naming rules.
+- `accessory/core/VisCostRulesTest` — the vis-discount rule: ceil rounding,
+  floor of 1 vis, clamped percentages.
+- `OptionalIntegrationIsolationTest` — bytecode guard: no compiled class
+  outside the Curios bridge (and the Curios-path game test) references
+  `top.theillusivec4.curios`, so no-Curios loading cannot regress silently.
 - `ModSmokeGameTest` — the game boots, the mod loads, runtime metadata is
   readable. This is the harness's in-game proof of life; feature gametests
   land with their features.
+- `AccessoryCuriosGameTest` / `AccessoryFallbackGameTest` — a
+  provider-conditional pair (TL-019): the charm slot + amulet equip +
+  discounted-cast loop runs identically under the Curios bridge
+  (`runGameTestServer`) and the built-in fallback
+  (`runGameTestServer -Ptl.noCurios`); each asserts the other provider is
+  inert.
 
 ## Triage
 

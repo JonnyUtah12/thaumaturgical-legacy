@@ -28,6 +28,11 @@ sourceSets.main.resources {
 
 repositories {
     // Add here additional repositories if required by some of the dependencies below.
+    // Curios API (optional accessory integration, TL-019) — the mod's own Maven.
+    maven {
+        name = "Blameless Maven"
+        url = "https://maven.theillusivec4.top/"
+    }
 }
 
 base {
@@ -116,6 +121,16 @@ configurations {
 }
 
 dependencies {
+    // Optional accessory integration (TL-019, docs/architecture/ACCESSORY_SYSTEM.md).
+    // The bridge compiles against the Curios API but no Curios code is bundled; the
+    // core mod loads and runs with or without Curios on the runtime classpath.
+    // -Ptl.noCurios removes it from localRuntime so the no-Curios fallback and its
+    // game tests can be verified in-game (docs/TESTING.md).
+    compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
+    if (!project.hasProperty('tl.noCurios')) {
+        localRuntime "top.theillusivec4.curios:curios-neoforge:${curios_version}"
+    }
+
     // Example optional mod dependency with JEI
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
     // compileOnly "mezz.jei:jei-${mc_version}-common-api:${jei_version}"
@@ -156,6 +171,7 @@ var generateModMetadata = tasks.register("generateModMetadata", ProcessResources
             minecraft_version_range: minecraft_version_range,
             neo_version            : neo_version,
             loader_version_range   : loader_version_range,
+            curios_version         : curios_version,
             mod_id                 : mod_id,
             mod_name               : mod_name,
             mod_license            : mod_license,
@@ -186,6 +202,9 @@ tasks.named('test', Test).configure {
     systemProperty 'tl.modVersion', mod_version
     systemProperty 'tl.minecraftVersion', minecraft_version
     systemProperty 'tl.neoVersion', neo_version
+    systemProperty 'tl.curiosVersion', curios_version
+    systemProperty 'tl.mainClassesDir',
+            layout.buildDirectory.dir('classes/java/main').get().asFile.absolutePath
     systemProperty 'tl.generatedModsToml',
             layout.buildDirectory.file('generated/sources/modMetadata/META-INF/neoforge.mods.toml').get().asFile.absolutePath
     systemProperty 'tl.modSourceFile',

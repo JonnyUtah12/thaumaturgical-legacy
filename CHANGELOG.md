@@ -8,6 +8,19 @@ specified in [`docs/VERSIONING.md`](docs/VERSIONING.md).
 
 ## [Unreleased]
 
+### Added
+- Optional accessory integration (TL-019): provider-abstracted accessory layer
+  with a Curios 9.5.1 bridge (declared `compileOnly`/optional — the core mod
+  loads and runs without it; verified via `runGameTestServer -Ptl.noCurios`)
+  and a built-in fallback (player-save attachment, S2C sync, keepInventory-aware
+  death handling); dedicated `thaumaturgicallegacy.charm` slot declared as data
+  (slot + entity-grant JSON + `curios:` item tag); Vis Amulet item that
+  discounts wand spell vis costs identically under either provider; unit and
+  game-test coverage including a bytecode guard that no core class references
+  Curios types; design record corrected against the 9.5.1 jar (slot and
+  entity-slot registration are data-driven, not common-setup code)
+  (`docs/architecture/ACCESSORY_SYSTEM.md`).
+
 ## [0.1.0] - 2026-10-17
 
 ### Added

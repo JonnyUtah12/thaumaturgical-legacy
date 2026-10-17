@@ -115,6 +115,27 @@ Tweaks `2.12.1`, **ATM: Compat `1.0.0` (new in 8.3)**.
 6. **Pack-level known issues (not ours):** Ars Lectern interaction crash
    (break/re-place workaround); Draconic invisible items (see 4).
 
+## Integration notes — accessory system (TL-019, implemented)
+
+- Curios `9.5.1+1.21.1` (the ATM10 8.3 version) is declared `compileOnly` +
+  `localRuntime` and an **optional** dependency in `neoforge.mods.toml`
+  (`ordering=AFTER`). It is never bundled; the core mod loads and runs with
+  Curios absent (verified: `./gradlew runGameTestServer -Ptl.noCurios`).
+- Dedicated slot `thaumaturgicallegacy.charm` (size 1) rather than a preset
+  ring/necklace/belt, per conflict note 2 above. In 9.5.1 the slot type and
+  the player→slot grant are **data files**
+  (`data/thaumaturgicallegacy/curios/slots/…` and `…/curios/entities/…`);
+  programmatic `addSlotType` is deprecated-for-removal. Item→slot routing is
+  the item tag `curios:thaumaturgicallegacy.charm`.
+- Vis Amulet behavior is identical with or without Curios: gameplay reads only
+  our `WornAccessories` query; the Curios bridge and the built-in fallback
+  (player attachment + `thaumaturgicallegacy:charm_sync` payload) are
+  interchangeable providers selected once at startup. No core class
+  references `top.theillusivec4.curios` (bytecode-enforced by
+  `OptionalIntegrationIsolationTest`).
+- Future "+1 charm slot" research can use `CuriosApi.addSlotModifier` under
+  Curios; the fallback provider keeps its own size at 1 until then.
+
 ## Verification record
 
 - Downloaded and parsed `All the Mods 10-8.3.zip` (200,037,954 B) from

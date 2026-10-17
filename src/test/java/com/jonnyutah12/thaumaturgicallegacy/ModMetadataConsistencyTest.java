@@ -97,6 +97,25 @@ class ModMetadataConsistencyTest {
                 "minecraft range must cover the pinned minecraft_version");
     }
 
+    @Test
+    void curiosIsDeclaredAsAnOptionalIntegration() throws IOException {
+        // TL-019 design record: the core mod never requires Curios; the
+        // bridge activates only when it is present. The metadata must say
+        // the same thing the code does.
+        TomlParseResult toml = generatedMetadata();
+        TomlArray dependencies = toml.getArray("dependencies." + property("tl.modId"));
+        assertNotNull(dependencies, "dependencies section is missing");
+
+        TomlTable curios = findDependency(dependencies, "curios");
+        assertEquals("optional", curios.getString("type"),
+                "Curios must be optional — the core mod loads and runs without it (docs/architecture/ACCESSORY_SYSTEM.md)");
+        assertEquals("AFTER", curios.getString("ordering"),
+                "our common-setup registers the charm slot after Curios' own presets exist");
+        assertEquals("BOTH", curios.getString("side"), "the bridge runs on both sides");
+        assertEquals("[" + property("tl.curiosVersion") + ",)", curios.getString("versionRange"),
+                "the Curios floor must derive from gradle.properties curios_version (the ATM10 8.3 pin)");
+    }
+
     private static TomlTable findDependency(TomlArray dependencies, String dependencyModId) {
         for (int i = 0; i < dependencies.size(); i++) {
             TomlTable dependency = dependencies.getTable(i);

@@ -1,0 +1,6 @@
+{
+  "size": 1,
+  "order": 100,
+  "icon": "thaumaturgicallegacy:slot/charm",
+  "validators": ["curios:tag"]
+}

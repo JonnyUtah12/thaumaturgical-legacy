@@ -36,8 +36,9 @@ curios-neoforge-9.5.1+1.21.1.jar`):
 
 | Concern | Verified API |
 | --- | --- |
-| Slot type registration | `CuriosApi.getSlotHelper().addSlotType(ISlotType)`; impl `top.theillusivec4.curios.common.slottype.SlotType.Builder(String id)` with `icon/order/size/useNativeGui/hasCosmetic/renderToggle/dropRule/validator`. Curios registers its own presets from `FMLCommonSetupEvent` (`top.theillusivec4.curios.Curios.setup`); third parties register from their own common-setup (`enqueueWork`). |
+| Slot type registration | **Data-driven in 9.5.1** (corrected at TL-019 implementation): slot types load from datapack files `<namespace>:curios/slots/<slot-id>.json` (`CuriosSlotManager`, a `SimpleJsonResourceReloadListener` over `curios/slots`; slot id = the file path, so a dotted id like `thaumaturgicallegacy.charm` is one legal path segment; `size` in the JSON is the default per-entity size — `SlotHelper.createSlots` reads `ISlotType.getSize()`). The programmatic `CuriosApi.getSlotHelper().addSlotType(ISlotType)` (`SlotType.Builder` with `icon/order/size/...`) is deprecated-for-removal and the slot helper does not exist until `ServerAboutToStartEvent` — common-setup `enqueueWork` registration NPEs (observed). `Curios.setup` only builds legacy IMC slot types. |
 | Presets | `SlotTypePreset`: `head, necklace, back, body, bracelet, hands, ring, belt, charm, curio`. |
+| Entity→slot granting | Also data-driven: `<namespace>:curios/entities/<name>.json` with `{"entities": ["minecraft:player"], "slots": ["<slot-id>"]}` (`CuriosEntityManager`; optional `replace`, `conditions`). A registered slot type is granted to an entity type only through this — `CuriosApi.getEntitySlots(LivingEntity)` resolves per-EntityType from these files, and `isStackValid` on a custom slot id passes only when the entity actually has that slot. |
 | Item→slot routing | Item **tags**: `CuriosTags.createItemTag(id)` builds tag `curios:<id>` (bytecode-verified: `ResourceLocation.fromNamespaceAndPath("curios", id)`). A dotted custom id is a single legal path segment. |
 | Item behavior | `ICurioItem` (onEquip/onUnequip/canEquip/canUnequip/curioTick/onEquipFromUse/canEquipFromUse/getAttributeModifiers/curioBreak/getDropRule/writeSyncData/readSyncData/canSync) — **or** `CuriosApi.registerCurio(Item, ICurioItem)`, which attaches behavior without the item class implementing any Curios type. This is the load-safety mechanism for optional integration. |
 | Access | `CuriosApi.getCuriosInventory(LivingEntity) → Optional<ICuriosItemHandler>`; `ICuriosHelper.findFirstCurio/findCurios`; NeoForge `EntityCapability` `CuriosCapability.INVENTORY` / `ITEM_HANDLER`, `ItemCapability` `ITEM` (modern NeoForge capabilities — not Forge caps, not attachments). |
@@ -102,9 +103,9 @@ com.jonnyutah12.thaumaturgicallegacy.accessory
 ```
 
 - **Provider selection at startup, exactly one active.** With Curios: the
-  bridge registers the slot type and registers item behavior via
-  `registerCurio`; the fallback provider is inert (no double-equip, no
-  duplicate state). Without Curios: fallback provider active.
+  bridge registers item behavior via `registerCurio` (the charm slot type
+  itself is a data file, not code); the fallback provider is inert (no
+  double-equip, no duplicate state). Without Curios: fallback provider active.
 - **Effects consume `WornAccessories` only.** The vis-cost discount hooks the
   `SpellCatalog` cost path (mirroring TC's "pay from the vis amulet first"),
   runic shielding hooks damage events, hover hooks movement — none imports
@@ -158,10 +159,14 @@ com.jonnyutah12.thaumaturgicallegacy.accessory
 - Implement per the layout above; TL-019's acceptance list (slot definition,
   validation, insertion/removal, persistence, equipped effects, death/respawn,
   client/server sync, no-Curios startup gametest) applies unchanged.
-- Verify at implementation time (flagged, not assumed): tag file naming for
-  the dotted slot id (`data/curios/tags/item/thaumaturgicallegacy.charm.json`
-  — path segment contains a literal dot), `SlotType.Builder` defaults before
-  overriding `size`, and `addSlotModifier` behavior on a custom slot id.
+- Verified at implementation (TL-019): tag file naming for the dotted slot id
+  works as a single path segment (`data/curios/tags/item/thaumaturgicallegacy.charm.json`);
+  slot registration is data-driven (`data/thaumaturgicallegacy/curios/slots/thaumaturgicallegacy.charm.json`,
+  `size: 1` is the default size — see the corrected API row above) AND the slot
+  must be granted to players via `data/thaumaturgicallegacy/curios/entities/charm.json`
+  (both files required; observed: without the entities file the slot registers
+  but `isStackValid`/insertion never see it);
+  `addSlotModifier` on a custom slot id is exercised later (research reward).
 - ATM10 end-to-end check stays in TL-023 (isolated test env already has the
   Curios jar).
 
