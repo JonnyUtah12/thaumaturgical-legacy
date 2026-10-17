@@ -5,6 +5,7 @@ import com.jonnyutah12.thaumaturgicallegacy.items.ThaumicWandItem;
 import com.jonnyutah12.thaumaturgicallegacy.items.VisAmuletItem;
 import com.jonnyutah12.thaumaturgicallegacy.magic.Spell;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredItem;
@@ -46,6 +47,19 @@ public final class ModItems {
     public static final DeferredItem<VisAmuletItem> VIS_AMULET =
             ITEMS.registerItem("vis_amulet", props -> new VisAmuletItem(props
                     .stacksTo(1)
+                    .rarity(Rarity.UNCOMMON)));
+
+    /**
+     * Research Note: Tapping the Flow (TL-017/TL-018). Granted as the
+     * Wandwright reward and consumed as the Vis Tap recipe's knowledge gate —
+     * the modern stand-in for Thaumcraft's research-gated recipes
+     * (CORE_MECHANICS.md §7.6: recipes carry a research key checked against
+     * the acting player; we carry the knowledge as a physical note instead,
+     * which needs no per-player recipe hook in NeoForge 21.1).
+     */
+    public static final DeferredItem<Item> RESEARCH_NOTE =
+            ITEMS.registerItem("research_note", props -> new Item(props
+                    .stacksTo(16)
                     .rarity(Rarity.UNCOMMON)));
 
     /** See {@link ModBlocks#register(IEventBus)}: must run before RegisterEvents fire. */

@@ -23,6 +23,7 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.THAUMIC_WAND.get());
                         output.accept(ModItems.VIS_TAP_ITEM.get());
                         output.accept(ModItems.VIS_AMULET.get());
+                        output.accept(ModItems.RESEARCH_NOTE.get());
                     })
                     .build());
 

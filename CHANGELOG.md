@@ -9,6 +9,17 @@ specified in [`docs/VERSIONING.md`](docs/VERSIONING.md).
 ## [Unreleased]
 
 ### Added
+- Research progression (TL-017): per-player research knowledge persisted in a
+  NeoForge player attachment (enum-name codec, client sync, `copyOnDeath`),
+  a prerequisite-gated entry tree (First Sight → Wandwright → Tapping the
+  Flow) unlocked by join/craft/place triggers mirroring the verified
+  Thaumcraft 4 trigger model, chat announcements, and a Research Note reward;
+  design record (`docs/architecture/RESEARCH_SYSTEM_V0_2.md`).
+- Research-gated crafting and spell unlocks (TL-018): the Vis Tap recipe now
+  requires the Wandwright Research Note (knowledge-as-ingredient stand-in for
+  TC's per-player recipe research keys — vanilla-enforced, no container
+  hooks), and Frost Lance is gated behind Tapping the Flow: the wand only
+  cycles and casts research-known spells.
 - Optional accessory integration (TL-019): provider-abstracted accessory layer
   with a Curios 9.5.1 bridge (declared `compileOnly`/optional — the core mod
   loads and runs without it; verified via `runGameTestServer -Ptl.noCurios`)

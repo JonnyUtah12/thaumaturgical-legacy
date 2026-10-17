@@ -3,10 +3,12 @@ package com.jonnyutah12.thaumaturgicallegacy;
 import com.jonnyutah12.thaumaturgicallegacy.accessory.AccessoryProviders;
 import com.jonnyutah12.thaumaturgicallegacy.accessory.curios.CuriosBridge;
 import com.jonnyutah12.thaumaturgicallegacy.accessory.fallback.CharmSyncPayload;
+import com.jonnyutah12.thaumaturgicallegacy.event.ResearchEvents;
 import com.jonnyutah12.thaumaturgicallegacy.gametest.AccessoryCuriosGameTest;
 import com.jonnyutah12.thaumaturgicallegacy.gametest.AccessoryFallbackGameTest;
 import com.jonnyutah12.thaumaturgicallegacy.gametest.MagicSystemGameTest;
 import com.jonnyutah12.thaumaturgicallegacy.gametest.ModSmokeGameTest;
+import com.jonnyutah12.thaumaturgicallegacy.gametest.ResearchGameTest;
 import com.jonnyutah12.thaumaturgicallegacy.registration.ModAttachments;
 import com.jonnyutah12.thaumaturgicallegacy.registration.ModBlockEntities;
 import com.jonnyutah12.thaumaturgicallegacy.registration.ModBlocks;
@@ -60,6 +62,9 @@ public class ThaumaturgicalLegacy {
             CuriosBridge.registerBusHooks(modEventBus);
         }
 
+        // Research progression (TL-017): game-bus triggers, always active.
+        ResearchEvents.register();
+
         modEventBus.addListener(this::registerPayloads);
         modEventBus.addListener(this::registerGameTests);
 
@@ -89,6 +94,7 @@ public class ThaumaturgicalLegacy {
     private void registerGameTests(RegisterGameTestsEvent event) {
         event.register(ModSmokeGameTest.class);
         event.register(MagicSystemGameTest.class);
+        event.register(ResearchGameTest.class);
         if (AccessoryProviders.curiosLoaded()) {
             event.register(AccessoryCuriosGameTest.class);
         } else {

@@ -1,6 +1,10 @@
 {
   "item.thaumaturgicallegacy.thaumic_wand": "Thaumic Wand",
   "item.thaumaturgicallegacy.vis_amulet": "Vis Amulet",
+  "item.thaumaturgicallegacy.research_note": "Research Note: Tapping the Flow",
+  "research.thaumaturgicallegacy.first_sight": "First Sight",
+  "research.thaumaturgicallegacy.wandcraft": "Wandwright",
+  "research.thaumaturgicallegacy.vis_tapping": "Tapping the Flow",
   "block.thaumaturgicallegacy.vis_tap": "Vis Tap",
   "itemGroup.thaumaturgicallegacy.thaumaturgy": "Thaumaturgy",
   "spell.thaumaturgicallegacy.firebolt": "Firebolt",
@@ -17,6 +21,11 @@
   "message.thaumaturgicallegacy.tap_charged": "Channeled %s vis into the wand",
   "message.thaumaturgicallegacy.tap_status": "Vis Tap: %s / %s vis",
   "message.thaumaturgicallegacy.spell_selected": "Active spell: %s",
+  "message.thaumaturgicallegacy.spell_locked": "The wand cannot channel that spell yet - it is not among your research",
+  "message.thaumaturgicallegacy.no_other_spells": "You know no other spell to channel",
+  "message.thaumaturgicallegacy.research_unlocked": "Research unlocked: %s",
+  "message.thaumaturgicallegacy.research_first_sight_hint": "The world hums with unseen currents. A crafted focus of amethyst and wood might let you shape them.",
+  "message.thaumaturgicallegacy.research_note_granted": "A note on your work takes shape: craft a Vis Tap to draw vis from the ambient flow.",
   "message.thaumaturgicallegacy.amulet_equipped": "The amulet hums against your chest",
   "message.thaumaturgicallegacy.amulet_unequipped": "The amulet goes quiet"
 }

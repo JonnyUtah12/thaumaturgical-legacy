@@ -2,10 +2,12 @@ package com.jonnyutah12.thaumaturgicallegacy.items;
 
 import com.jonnyutah12.thaumaturgicallegacy.blockentity.VisTapBlockEntity;
 import com.jonnyutah12.thaumaturgicallegacy.accessory.WornAccessories;
+import com.jonnyutah12.thaumaturgicallegacy.event.ResearchEvents;
 import com.jonnyutah12.thaumaturgicallegacy.magic.Spell;
 import com.jonnyutah12.thaumaturgicallegacy.magic.SpellCatalog;
 import com.jonnyutah12.thaumaturgicallegacy.magic.SpellDefinition;
 import com.jonnyutah12.thaumaturgicallegacy.magic.VisStorage;
+import com.jonnyutah12.thaumaturgicallegacy.magic.research.ResearchCatalog;
 import com.jonnyutah12.thaumaturgicallegacy.registration.ModDataComponents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -73,6 +75,15 @@ public class ThaumicWandItem extends Item {
 
         Spell spell = activeSpell(stack);
         SpellDefinition definition = SpellCatalog.definition(spell);
+        // Research gate (TL-017): spells beyond Firebolt must be known to the
+        // player. Defensive check — the cycle below only selects known spells,
+        // but a stack can carry an ordinal from an older world or commands.
+        if (!ResearchEvents.isSpellKnown(player, spell)) {
+            player.displayClientMessage(
+                    Component.translatable("message.thaumaturgicallegacy.spell_locked"), true);
+            player.getCooldowns().addCooldown(this, EMPTY_COOLDOWN_TICKS);
+            return InteractionResultHolder.success(stack);
+        }
         VisStorage vis = readVis(stack);
         // Worn accessories (vis amulet) discount the cost; the query is
         // provider-independent (TL-019, docs/architecture/ACCESSORY_SYSTEM.md).
@@ -188,13 +199,34 @@ public class ThaumicWandItem extends Item {
     }
 
     private static void cycleSpell(ItemStack stack, Player player) {
-        Spell next = activeSpell(stack).next();
+        // Only research-known spells participate in the cycle (TL-017).
+        List<Spell> known = knownSpells(player);
+        if (known.size() < 2) {
+            player.displayClientMessage(
+                    Component.translatable("message.thaumaturgicallegacy.no_other_spells"), true);
+            return;
+        }
+        int index = known.indexOf(activeSpell(stack));
+        Spell next = known.get((index + 1) % known.size());
         stack.set(ModDataComponents.ACTIVE_SPELL.get(), next.ordinal());
         player.getCooldowns().addCooldown(stack.getItem(), CYCLE_COOLDOWN_TICKS);
         player.displayClientMessage(
                 Component.translatable("message.thaumaturgicallegacy.spell_selected",
                         Component.translatable(next.descriptionId())),
                 true);
+    }
+
+    /** Catalog order filtered by the player's research; Firebolt is always in. */
+    private static List<Spell> knownSpells(Player player) {
+        java.util.Set<Spell> unlocked = ResearchCatalog.spellsUnlockedBy(
+                ResearchEvents.knowledge(player).known());
+        List<Spell> known = new java.util.ArrayList<>();
+        for (Spell spell : Spell.values()) {
+            if (spell == Spell.FIREBOLT || unlocked.contains(spell)) {
+                known.add(spell);
+            }
+        }
+        return known;
     }
 
     private static VisStorage readVis(ItemStack stack) {
