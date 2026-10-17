@@ -3,10 +3,14 @@
 All notable changes to Thaumaturgical Legacy are documented here.
 The format follows Keep a Changelog; this project adheres to Semantic Versioning.
 Versions below refer to the **project** version (Minecraft 1.21.1 / NeoForge 21.1.259 are separate).
+Versioning rules, the SNAPSHOT/tagging convention, and the release process are
+specified in [`docs/VERSIONING.md`](docs/VERSIONING.md).
 
 ## [Unreleased]
 
 ### Added
+- Versioning and changelog management: version scheme, SNAPSHOT/tagging
+  convention, changelog rules, release process (`docs/VERSIONING.md`, TL-011).
 - Project infrastructure: git repository, MIT license, changelog, README (TL-001..TL-006).
 - Environment audit with verified artifact/toolchain facts (`docs/ENVIRONMENT_AUDIT.md`, TL-001).
 - REA + decompilation workflow with capability matrix (`docs/reverse-engineering/REA_WORKFLOW.md`, TL-002/TL-005).

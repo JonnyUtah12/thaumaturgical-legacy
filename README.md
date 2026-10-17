@@ -25,6 +25,7 @@ progress. Task state lives on the Hermes Kanban board and in `project/KANBAN.md`
 | `docs/ENVIRONMENT_AUDIT.md` | Verified toolchain and artifact facts |
 | `docs/reverse-engineering/` | REA workflow, artifact inventories, mechanics analysis |
 | `docs/REVERSE_ENGINEERING_POLICY.md` | License findings and clean-room policy |
+| `docs/VERSIONING.md` | Version scheme, changelog rules, release process |
 | `docs/ASSET_PROVENANCE.md` | Asset origin register |
 | `docs/architecture/` | Modern architecture decisions |
 
