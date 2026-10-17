@@ -27,6 +27,9 @@ progress. Task state lives on the Hermes Kanban board and in `project/KANBAN.md`
 | `docs/REVERSE_ENGINEERING_POLICY.md` | License findings and clean-room policy |
 | `docs/VERSIONING.md` | Version scheme, changelog rules, release process |
 | `docs/TESTING.md` | Test layers (unit + gametest), commands, CI, test rules |
+| `docs/DISTRIBUTION.md` | Publication channels: GitHub Releases active; CurseForge/Modrinth not claimed |
+| `docs/RELEASE_CHECKLIST.md` | Operational release steps (executable form of VERSIONING.md) |
+| `docs/ATM10_RELEASE_CHECKLIST.md` | Additional pack checks: startup, gameplay, integration, performance, world safety |
 | `docs/ASSET_PROVENANCE.md` | Asset origin register |
 | `docs/architecture/` | Modern architecture decisions |
 
