@@ -9,6 +9,9 @@ specified in [`docs/VERSIONING.md`](docs/VERSIONING.md).
 ## [Unreleased]
 
 ### Added
+- First playable magic system (TL-009): Thaumic Wand with a vis energy
+  component and two castable spells (Firebolt, Frost Lance), and the Vis Tap
+  recharge block; design record in `docs/architecture/MAGIC_SYSTEM_V0_1.md`.
 - ATM10 compatibility study: pack 8.3 pinned (MC 1.21.1 / NeoForge 21.1.259 /
   Java 21, exact match to our toolchain), Curios 9.5.1 confirmed as the pack's
   accessory framework, overlap and conflict analysis (`docs/ATM10_COMPATIBILITY.md`, TL-021).

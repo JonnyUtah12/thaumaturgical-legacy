@@ -1,0 +1,16 @@
+{
+  "item.thaumaturgicallegacy.thaumic_wand": "Thaumic Wand",
+  "block.thaumaturgicallegacy.vis_tap": "Vis Tap",
+  "itemGroup.thaumaturgicallegacy.thaumaturgy": "Thaumaturgy",
+  "spell.thaumaturgicallegacy.firebolt": "Firebolt",
+  "spell.thaumaturgicallegacy.frost_lance": "Frost Lance",
+  "tooltip.thaumaturgicallegacy.vis": "Vis: %s / %s",
+  "tooltip.thaumaturgicallegacy.spell": "Active spell: %s",
+  "tooltip.thaumaturgicallegacy.hint": "Right-click: cast · Shift + right-click: change spell",
+  "message.thaumaturgicallegacy.wand_empty": "The wand is out of vis - channel more from a Vis Tap",
+  "message.thaumaturgicallegacy.wand_full": "The wand is already saturated with vis",
+  "message.thaumaturgicallegacy.tap_empty": "The Vis Tap has not gathered any vis yet",
+  "message.thaumaturgicallegacy.tap_charged": "Channeled %s vis into the wand",
+  "message.thaumaturgicallegacy.tap_status": "Vis Tap: %s / %s vis",
+  "message.thaumaturgicallegacy.spell_selected": "Active spell: %s"
+}

@@ -1,5 +1,8 @@
 package com.jonnyutah12.thaumaturgicallegacy;
 
+import com.jonnyutah12.thaumaturgicallegacy.registration.ModBlockEntities;
+import com.jonnyutah12.thaumaturgicallegacy.registration.ModCreativeTabs;
+import com.jonnyutah12.thaumaturgicallegacy.registration.ModDataComponents;
 import com.mojang.logging.LogUtils;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -26,6 +29,9 @@ public class ThaumaturgicalLegacy {
     public ThaumaturgicalLegacy(IEventBus modEventBus, ModContainer modContainer) {
         BLOCKS.register(modEventBus);
         ITEMS.register(modEventBus);
+        ModDataComponents.DATA_COMPONENTS.register(modEventBus);
+        ModBlockEntities.BLOCK_ENTITY_TYPES.register(modEventBus);
+        ModCreativeTabs.CREATIVE_TABS.register(modEventBus);
 
         LOGGER.info("Thaumaturgical Legacy {} loading (NeoForge, MC 1.21.1)", version(modContainer));
     }
