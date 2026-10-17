@@ -2,6 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
+    "N": {
+      "item": "thaumaturgicallegacy:research_note"
+    },
     "A": {
       "item": "minecraft:amethyst_shard"
     },
@@ -13,9 +16,9 @@
     }
   },
   "pattern": [
-    "A",
-    "I",
-    "S"
+    "NA",
+    "I ",
+    "S "
   ],
   "result": {
     "id": "thaumaturgicallegacy:vis_tap",
