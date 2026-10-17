@@ -8,6 +8,8 @@ specified in [`docs/VERSIONING.md`](docs/VERSIONING.md).
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-10-17
+
 ### Added
 - Automated testing: JUnit 5 unit harness wired into `./gradlew build` and CI,
   NeoForge gametest smoke test via `runGameTestServer`, testing policy and CI
@@ -26,6 +28,11 @@ specified in [`docs/VERSIONING.md`](docs/VERSIONING.md).
 - Thaumcraft 4.2.3.5 artifact inventory: API surface, content catalog, subsystem matrix (TL-003).
 - Baubles 1.0.1.10 artifact inventory: API contract, 4-slot model, persistence/sync (TL-004).
 - Reverse-engineering policy and asset provenance register; license findings (TL-006).
+- Core mechanics behavioral spec of Thaumcraft 4.2.3.5: aspect graph, node
+  lifecycle and vis economy, wand cost model with tier tables, crucible and
+  infusion state machines with exact constants, research knowledge economy,
+  warp counters; constants appendix and catalog corrections
+  (`docs/reverse-engineering/CORE_MECHANICS.md`, TL-006).
 
 ### Changed
 - Nothing yet.
