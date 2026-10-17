@@ -34,9 +34,6 @@ specified in [`docs/VERSIONING.md`](docs/VERSIONING.md).
   warp counters; constants appendix and catalog corrections
   (`docs/reverse-engineering/CORE_MECHANICS.md`, TL-006).
 
-### Changed
-- Nothing yet.
-
 ### Fixed
 - In-game mod load crash: deferred holder classes (`ModBlocks`, `ModItems`)
   were never initialized before RegisterEvents fired, so their entries were
@@ -49,3 +46,6 @@ specified in [`docs/VERSIONING.md`](docs/VERSIONING.md).
   wand's default components are now built inside the item factory because
   data-component holders are unbound until their RegisterEvent fires
   (TL-009 follow-up, found by the TL-010 gametest harness).
+
+[Unreleased]: https://github.com/JonnyUtah12/thaumaturgical-legacy/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/JonnyUtah12/thaumaturgical-legacy/compare/9d3033d5f40ef87b5c57224de66ec424604a2c14...v0.1.0
