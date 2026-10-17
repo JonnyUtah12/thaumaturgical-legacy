@@ -9,6 +9,9 @@ specified in [`docs/VERSIONING.md`](docs/VERSIONING.md).
 ## [Unreleased]
 
 ### Added
+- ATM10 compatibility study: pack 8.3 pinned (MC 1.21.1 / NeoForge 21.1.259 /
+  Java 21, exact match to our toolchain), Curios 9.5.1 confirmed as the pack's
+  accessory framework, overlap and conflict analysis (`docs/ATM10_COMPATIBILITY.md`, TL-021).
 - Versioning and changelog management: version scheme, SNAPSHOT/tagging
   convention, changelog rules, release process (`docs/VERSIONING.md`, TL-011).
 - Project infrastructure: git repository, MIT license, changelog, README (TL-001..TL-006).
