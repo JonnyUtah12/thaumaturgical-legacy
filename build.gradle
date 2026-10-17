@@ -134,6 +134,15 @@ dependencies {
     // Example project dependency using a sister or child project:
     // implementation project(":myproject")
 
+    // Unit-test harness (TL-010). The test source set deliberately has no
+    // Minecraft/NeoForge classpath: unit tests cover build wiring, config and
+    // pure logic only. In-game behavior is covered by NeoForge gametests
+    // (see docs/TESTING.md).
+    testImplementation platform('org.junit:junit-bom:5.11.4')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation 'org.tomlj:tomlj:1.1.1'
+
     // For more info:
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
@@ -162,6 +171,26 @@ var generateModMetadata = tasks.register("generateModMetadata", ProcessResources
 sourceSets.main.resources.srcDir generateModMetadata
 // To avoid having to run "generateModMetadata" manually, make it run on every project reload
 neoForge.ideSyncTask generateModMetadata
+
+// --- Automated testing (TL-010) -------------------------------------------------
+// Unit tests guard the build/metadata wiring and version policy without booting
+// the game; they run as part of `./gradlew build` (and therefore CI). Values are
+// injected from gradle.properties so tests never hardcode them — gradle.properties
+// stays the single source of truth (docs/VERSIONING.md).
+tasks.named('test', Test).configure {
+    useJUnitPlatform()
+    dependsOn generateModMetadata
+    systemProperty 'tl.modId', mod_id
+    systemProperty 'tl.modName', mod_name
+    systemProperty 'tl.modLicense', mod_license
+    systemProperty 'tl.modVersion', mod_version
+    systemProperty 'tl.minecraftVersion', minecraft_version
+    systemProperty 'tl.neoVersion', neo_version
+    systemProperty 'tl.generatedModsToml',
+            layout.buildDirectory.file('generated/sources/modMetadata/META-INF/neoforge.mods.toml').get().asFile.absolutePath
+    systemProperty 'tl.modSourceFile',
+            file('src/main/java/com/jonnyutah12/thaumaturgicallegacy/ThaumaturgicalLegacy.java').absolutePath
+}
 
 // Example configuration to allow publishing using the maven-publish plugin
 publishing {

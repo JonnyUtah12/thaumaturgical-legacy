@@ -23,3 +23,15 @@ jobs:
 
       - name: Build with Gradle
         run: ./gradlew build
+
+      # In-game tests on the NeoForge game test server (docs/TESTING.md).
+      # Separate from `build` so the unit layer stays fast; a red run here
+      # blocks release per docs/VERSIONING.md.
+      - name: Game tests
+        run: ./gradlew runGameTestServer
+        timeout-minutes: 20
+
+      # runGameTestServer can exit 0 even when the server crashes during mod
+      # loading (no tests ever run), so assert the summary line explicitly.
+      - name: Assert game tests ran and passed
+        run: grep -q "required tests passed" run/logs/latest.log

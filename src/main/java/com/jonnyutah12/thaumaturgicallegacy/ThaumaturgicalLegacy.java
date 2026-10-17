@@ -1,5 +1,6 @@
 package com.jonnyutah12.thaumaturgicallegacy;
 
+import com.jonnyutah12.thaumaturgicallegacy.gametest.ModSmokeGameTest;
 import com.jonnyutah12.thaumaturgicallegacy.registration.ModBlockEntities;
 import com.jonnyutah12.thaumaturgicallegacy.registration.ModCreativeTabs;
 import com.jonnyutah12.thaumaturgicallegacy.registration.ModDataComponents;
@@ -7,6 +8,7 @@ import com.mojang.logging.LogUtils;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.RegisterGameTestsEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import org.slf4j.Logger;
 
@@ -32,8 +34,17 @@ public class ThaumaturgicalLegacy {
         ModDataComponents.DATA_COMPONENTS.register(modEventBus);
         ModBlockEntities.BLOCK_ENTITY_TYPES.register(modEventBus);
         ModCreativeTabs.CREATIVE_TABS.register(modEventBus);
+        modEventBus.addListener(this::registerGameTests);
 
         LOGGER.info("Thaumaturgical Legacy {} loading (NeoForge, MC 1.21.1)", version(modContainer));
+    }
+
+    /**
+     * Game tests only exist while the gametest system is active (see
+     * docs/TESTING.md); this listener is inert in normal play.
+     */
+    private void registerGameTests(RegisterGameTestsEvent event) {
+        event.register(ModSmokeGameTest.class);
     }
 
     private static String version(ModContainer modContainer) {

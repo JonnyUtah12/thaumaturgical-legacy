@@ -9,6 +9,9 @@ specified in [`docs/VERSIONING.md`](docs/VERSIONING.md).
 ## [Unreleased]
 
 ### Added
+- Automated testing: JUnit 5 unit harness wired into `./gradlew build` and CI,
+  NeoForge gametest smoke test via `runGameTestServer`, testing policy and CI
+  integration (`docs/TESTING.md`, TL-010).
 - First playable magic system (TL-009): Thaumic Wand with a vis energy
   component and two castable spells (Firebolt, Frost Lance), and the Vis Tap
   recharge block; design record in `docs/architecture/MAGIC_SYSTEM_V0_1.md`.

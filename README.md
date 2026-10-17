@@ -26,6 +26,7 @@ progress. Task state lives on the Hermes Kanban board and in `project/KANBAN.md`
 | `docs/reverse-engineering/` | REA workflow, artifact inventories, mechanics analysis |
 | `docs/REVERSE_ENGINEERING_POLICY.md` | License findings and clean-room policy |
 | `docs/VERSIONING.md` | Version scheme, changelog rules, release process |
+| `docs/TESTING.md` | Test layers (unit + gametest), commands, CI, test rules |
 | `docs/ASSET_PROVENANCE.md` | Asset origin register |
 | `docs/architecture/` | Modern architecture decisions |
 
@@ -33,3 +34,10 @@ progress. Task state lives on the Hermes Kanban board and in `project/KANBAN.md`
 
 Requires JDK 21. `./gradlew build` produces the mod JAR in `build/libs/`.
 Neither original JAR is required to build or run this mod.
+
+## Testing
+
+`./gradlew test` runs the unit layer (also part of `build`);
+`./gradlew runGameTestServer` runs in-game tests on the NeoForge game test
+server. Both run in CI. See `docs/TESTING.md` for the policy and how to
+write new tests.
