@@ -1,0 +1,25 @@
+# Gradle
+.gradle/
+build/
+out/
+run/
+runs/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+.settings/
+.classpath
+.project
+bin/
+
+# OS
+.DS_Store
+
+# Local secrets / environment
+local.properties
+*.env
+
+# Decompilation scratch (must stay outside the repo)
+decompiled/
