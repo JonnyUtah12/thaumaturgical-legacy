@@ -5,6 +5,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.registries.Registries;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -23,6 +24,11 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.VIS_TAP_ITEM.get());
                     })
                     .build());
+
+    /** See {@link ModBlocks#register(IEventBus)}: must run before RegisterEvents fire. */
+    public static void register(IEventBus bus) {
+        CREATIVE_TABS.register(bus);
+    }
 
     private ModCreativeTabs() {
     }

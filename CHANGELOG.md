@@ -31,4 +31,14 @@ specified in [`docs/VERSIONING.md`](docs/VERSIONING.md).
 - Nothing yet.
 
 ### Fixed
-- Nothing yet.
+- In-game mod load crash: deferred holder classes (`ModBlocks`, `ModItems`)
+  were never initialized before RegisterEvents fired, so their entries were
+  added too late — the block-entity supplier forced `ModBlocks` class-init
+  during the `BLOCK_ENTITY_TYPES` event, after the `BLOCKS` event had already
+  fired (`IllegalStateException: Cannot register new entries to
+  DeferredRegister after RegisterEvent has been fired`). Registration is now
+  explicit and dependency-ordered from the mod constructor; the shared
+  block/item DeferredRegisters moved into their holder classes, and the
+  wand's default components are now built inside the item factory because
+  data-component holders are unbound until their RegisterEvent fires
+  (TL-009 follow-up, found by the TL-010 gametest harness).
