@@ -95,9 +95,9 @@ why the live multiplayer join (section C) could not be completed.
 | Recipes load | **PASS** | 0 recipe errors; 0 duplicate/conflicting-recipe warnings across the pack's recipe set |
 | Research progresses | **not exercised in ATM10** | per-player progression needs an in-game session; the identical code path is covered by `ResearchGameTest` (dev env) |
 | Magic systems work | **PASS (load-level)** | common + client setup completed on both sides; no errors from our packages in any run |
-| Item models | **DEFECT (ours)** | client log: `Unable to load model: 'thaumaturgicallegacy:item/vis_tap' … FileNotFoundException: thaumaturgicallegacy:models/item/vis_tap.json`. Confirmed: the model file is absent from our sources and jar (the other three items have models). Cosmetic; tracked for TL-024 |
+| Item models | **FIXED (TL-024)** | original run: client log `Unable to load model: 'thaumaturgicallegacy:item/vis_tap' … FileNotFoundException: thaumaturgicallegacy:models/item/vis_tap.json` (file absent from sources/jar; cosmetic). Fixed by adding the block-item model; re-tested 22:51/23:13 runs below — 85 missing-model warnings in the client run, **zero** mention `thaumaturgicallegacy` |
 
-### C. Integration — PASS (one defect above)
+### C. Integration — PASS
 
 | Check | Result | Evidence |
 | --- | --- | --- |
@@ -126,11 +126,48 @@ work.
 | Restart doesn't duplicate resources | **PASS** | no recipe/registry duplication across five server lifecycles |
 | Uninstall limitation | **documented** | removing our mod silently drops our player attachments (research knowledge) and fallback accessory data; no world data of ours to migrate (no worldgen) |
 
-### Defects found (input for TL-024)
+### Defects found (input for TL-024) — all resolved
 
 1. Missing item model `assets/thaumaturgicallegacy/models/item/vis_tap.json`
-   — Vis Tap renders as the missing-model placeholder in the client.
-   Root cause: file never added to sources. Cosmetic, no functional impact.
+   — Vis Tap rendered as the missing-model placeholder in the client.
+   Root cause: the `vis_tap` BlockItem was registered
+   (`ModItems.registerSimpleBlockItem`) but no item model was ever added to
+   sources — the block model (`models/block/vis_tap.json`) and blockstate
+   exist, and the other three items have item models; vanilla logs the WARN
+   and substitutes the placeholder. Cosmetic, no functional impact.
+   Fix: added `models/item/vis_tap.json` (`parent:
+   thaumaturgicallegacy:block/vis_tap`) — the standard block-item model.
+
+### Fix re-test (TL-024) — 2026-10-17, same isolated instance
+
+Rebuilt `thaumaturgicallegacy-0.2.0-SNAPSHOT.jar` with the model file
+(sha256 `406e4887…7aef157`, identical bytes deployed to `client/mods` and
+`server/mods`) and re-ran both sides:
+
+- **Server** (22:49–22:51, scope `MemoryMax=11G`): jar discovered via mod
+  manifest, `Thaumaturgical Legacy 0.2.0-SNAPSHOT loading` +
+  `Accessory provider active: curios`, `Done (3.090s)!` warm reload; 177
+  ERROR lines, **zero** mentioning our mod; SIGTERM → exit 143, clean
+  `level.dat` save at 22:51, no OOM (scope peak 7.3G).
+- **Client** (23:11–23:13, headless Xvfb + llvmpipe, `-Xmx8G`, scope
+  `MemoryMax=12G` + swap): our mod loaded, Curios bridge active,
+  `Thaumaturgical Legacy client setup complete`, title screen reached
+  (`Sound engine started`, ModernFix `Game took 159.809 seconds`). 79
+  ERROR lines, zero ours. **85 `Unable to load model` warnings — all
+  pack-side (silentgear, potionsmaster, etc.); zero mention
+  `thaumaturgicallegacy`.** The defect's exact signature from the 22:28
+  baseline run (`Unable to load model: 'thaumaturgicallegacy:item/vis_tap'`)
+  is gone.
+- Harness note (adds to the one above): scope memory must account for
+  page cache inside the cgroup — the client scope peaked at **11.2G**
+  (a 10G scope with `MemorySwapMax=0` was OOM-killed at 22:55 during
+  resource loading; the successful run used `MemoryMax=12G` +
+  `MemorySwapMax=3G`). The server peaked at 7.3G during AlmostUnified
+  recipe unification (a 6G scope OOM-killed at 22:43).
+
+No other defects were found by the battery, so none needed fixing; the
+pack-side error inventory (136/132 server, 47→79 client per run) belongs
+to the pack, not to us, and is itemized in section A.
 
 ### Limitations (honest scope)
 
@@ -153,9 +190,11 @@ work.
 
 **Verdict: Thaumaturgical Legacy 0.2.0-SNAPSHOT loads and operates
 alongside ATM10 8.3 (MC 1.21.1 / NeoForge 21.1.259) on both the dedicated
-server (five lifecycles) and the client (title screen reached), with zero
-errors attributable to our mod, and its optional Curios integration
-activates as designed on both sides. One cosmetic defect found
-(missing `vis_tap` item model), tracked for TL-024. Live multiplayer sync
-remains unverified on this host due to its 14 GiB memory ceiling. This is
-our own test result — not an official ATM10 compatibility statement.**
+server (five lifecycles, plus the TL-024 re-test) and the client (title
+screen reached, plus the TL-024 re-test), with zero errors attributable to
+our mod, and its optional Curios integration activates as designed on both
+sides. The one cosmetic defect found (missing `vis_tap` item model) was
+fixed in TL-024 and verified gone by re-running both sides against the
+same instance. Live multiplayer sync remains unverified on this host due
+to its 14 GiB memory ceiling. This is our own test result — not an
+official ATM10 compatibility statement.**

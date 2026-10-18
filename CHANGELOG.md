@@ -32,6 +32,14 @@ specified in [`docs/VERSIONING.md`](docs/VERSIONING.md).
   entity-slot registration are data-driven, not common-setup code)
   (`docs/architecture/ACCESSORY_SYSTEM.md`).
 
+### Fixed
+- Vis Tap item model (TL-024): added the missing
+  `assets/thaumaturgicallegacy/models/item/vis_tap.json` (parent: our block
+  model). The unregistered model made the client log
+  `Unable to load model: 'thaumaturgicallegacy:item/vis_tap'` and render the
+  missing-model placeholder; found by the ATM10 8.3 battery and verified gone
+  by re-running the isolated client and server (`docs/ATM10_TESTING.md`).
+
 ## [0.1.0] - 2026-10-17
 
 ### Added
