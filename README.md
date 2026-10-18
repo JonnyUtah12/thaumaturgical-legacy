@@ -30,6 +30,7 @@ progress. Task state lives on the Hermes Kanban board and in `project/KANBAN.md`
 | `docs/DISTRIBUTION.md` | Publication channels: GitHub Releases active; CurseForge/Modrinth not claimed |
 | `docs/RELEASE_CHECKLIST.md` | Operational release steps (executable form of VERSIONING.md) |
 | `docs/ATM10_RELEASE_CHECKLIST.md` | Additional pack checks: startup, gameplay, integration, performance, world safety |
+| `docs/ATM10_INTEGRATION.md` | Integration proposal for ATM10 maintainers (not an official inclusion) |
 | `docs/ASSET_PROVENANCE.md` | Asset origin register |
 | `docs/architecture/` | Modern architecture decisions |
 
